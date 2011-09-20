@@ -59,6 +59,7 @@ cd $graylog2_base/server
 sudo mv -f graylog2.conf.example graylog2.conf
 sudo sed -e "s/mongodb_user = grayloguser/mongodb_user = $mongo_user/" -i graylog2.conf
 sudo sed -e "s/mongodb_password = 123/mongodb_password = $mongo_password/" -i graylog2.conf
+sudo sed -e "s/mongodb_database = graylog2/mongodb_database = $mongo_db/" -i graylog2.conf
 sudo sed -e "s/mongodb_host = localhost/mongodb_host = 127.0.0.1/" -i graylog2.conf
 sudo sed -e "s/messages_collection_size = 50000000/messages_collection_size = $graylog2_collection_size/" -i graylog2.conf
 sudo ln -sf $graylog2_base/server/graylog2.conf /etc/graylog2.conf
@@ -70,7 +71,7 @@ cd $graylog2_base/web
 sudo bundle install
 
 #setup mongoid.yml
-sudo sh -c 'echo  "production: \n username: graylog2\n password: password\n host: localhost\n port: 27017\n database: graylog2" > config/mongoid.yml'
+sudo sh -c "echo  \"production: \n username: $mongo_user\n password: $mongo_password\n host: localhost\n port: 27017\n database: $mongo_db\" > config/mongoid.yml"
 
 fqdn=`hostname --fqdn`
 sudo sed -e "s/external_hostname: \"your-graylog2.example.org\"/external_hostname: \"$fqdn\"/" -i config/general.yml
